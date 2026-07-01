@@ -2,540 +2,377 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Raydo Residential Lease Agreement</title>
+<title>Raydo Matthee Residential Lease Generator</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f3f5f7;
-  margin: 0;
-  color: #222;
-}
-
-header {
-  background: #172033;
-  color: white;
-  padding: 24px;
-  text-align: center;
-}
-
-.container {
-  max-width: 1100px;
-  margin: 25px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 18px rgba(0,0,0,.08);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-
-fieldset {
-  border: 1px solid #d5d9df;
-  border-radius: 10px;
-  padding: 18px;
-  margin-bottom: 22px;
-}
-
-legend {
-  font-weight: bold;
-  padding: 0 8px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-input, textarea, select {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #c5cad1;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
-
-textarea {
-  min-height: 80px;
-}
-
-button {
-  background: #172033;
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 7px;
-  cursor: pointer;
-  margin: 6px;
-}
-
-button.secondary {
-  background: #566070;
-}
-
-button.danger {
-  background: #9b1c1c;
-}
-
-.signature-pad {
-  border: 1px solid #333;
-  height: 130px;
-  background: white;
-  border-radius: 6px;
-  width: 100%;
-  touch-action: none;
-}
-
-.actions {
-  text-align: center;
-  margin-top: 25px;
-}
-
-#leasePreview {
-  display: none;
-  background: white;
-  padding: 35px;
-  margin-top: 30px;
-  border: 1px solid #ccc;
-}
-
-.lease-title {
-  text-align: center;
-  text-transform: uppercase;
-  margin-bottom: 25px;
-}
-
-.clause {
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
-
-.signature-img {
-  width: 280px;
-  height: 100px;
-  border: 1px solid #aaa;
-  object-fit: contain;
-}
-
-@media print {
-  body {
-    background: white;
-  }
-
-  form, header, .actions {
-    display: none;
-  }
-
-  #leasePreview {
-    display: block !important;
-    border: none;
-    margin: 0;
-    padding: 0;
-  }
+:root{--dark:#111827;--line:#cbd5e1;--soft:#f8fafc}
+body{font-family:Arial,Helvetica,sans-serif;background:#eef2f7;margin:0;color:#111}
+header{background:var(--dark);color:#fff;padding:24px;text-align:center}
+.wrap{max-width:1200px;margin:24px auto;background:#fff;padding:28px;border-radius:14px}
+fieldset{border:1px solid var(--line);border-radius:10px;margin:18px 0;padding:18px}
+legend{font-weight:bold;padding:0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+label{font-weight:bold;font-size:13px;display:block;margin-top:8px}
+input,textarea,select{width:100%;box-sizing:border-box;padding:10px;border:1px solid #94a3b8;border-radius:6px;margin-top:5px}
+textarea{min-height:70px}
+button{background:#111827;color:#fff;border:0;border-radius:8px;padding:12px 18px;margin:6px;cursor:pointer}
+button.alt{background:#475569}
+.sig{border:1px solid #111;height:120px;width:100%;border-radius:6px;background:white;touch-action:none}
+.actions{text-align:center;margin:24px 0}
+#preview{display:none;background:white;padding:35px;border:1px solid #ddd}
+.lease h1{text-align:center;text-transform:uppercase}
+.lease h2{border:1px solid #333;padding:7px;background:#f8fafc;font-size:15px;margin-top:20px}
+.lease p,.lease li{font-size:13px;line-height:1.55}
+.schedule{width:100%;border-collapse:collapse;font-size:12px}
+.schedule td,.schedule th{border:1px solid #333;padding:7px;vertical-align:top}
+.sigImg{width:260px;height:90px;border:1px solid #999;object-fit:contain}
+.pageBreak{page-break-before:always}
+.small{font-size:12px;color:#475569}
+@media print{
+  header,form,.actions{display:none}
+  body{background:white}
+  .wrap{box-shadow:none;margin:0;padding:0}
+  #preview{display:block!important;border:0;padding:0}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>Residential Lease Agreement</h1>
-  <p>Separate Tenant Rental Form | Raydo Vernon Matthee</p>
+<h1>Residential Lease Agreement Generator</h1>
+<p>Separate rental lease for two independent tenants</p>
 </header>
 
-<div class="container">
+<div class="wrap">
 
-<form id="leaseForm">
+<form id="form">
 
 <fieldset>
-<legend>Landlord Details</legend>
-
+<legend>Owner / Lessor</legend>
 <div class="grid">
-  <div>
-    <label>Landlord Full Name</label>
-    <input id="landlordName" value="Raydo Vernon Matthee" required />
-  </div>
-
-  <div>
-    <label>Landlord ID / Passport Number</label>
-    <input id="landlordId" />
-  </div>
-
-  <div>
-    <label>Landlord Phone</label>
-    <input id="landlordPhone" />
-  </div>
-
-  <div>
-    <label>Landlord Email</label>
-    <input id="landlordEmail" type="email" />
-  </div>
+<div><label>Full name</label><input id="ownerName" value="Raydo Vernon Matthee" required></div>
+<div><label>ID / Passport number</label><input id="ownerId" value="8908225071089"></div>
+<div><label>Phone</label><input id="ownerPhone"></div>
+<div><label>Email</label><input id="ownerEmail" type="email"></div>
+<div><label>Bank name</label><input id="bankName"></div>
+<div><label>Account number</label><input id="bankAcc"></div>
 </div>
 </fieldset>
 
 <fieldset>
-<legend>Property Details</legend>
-
-<label>Rental Property Address</label>
-<textarea id="propertyAddress" required>26 Second Avenue, Lambton, Ekurhuleni</textarea>
-
+<legend>Premises</legend>
+<label>Property address</label>
+<textarea id="address" required>26 Second Avenue, Lambton, Ekurhuleni</textarea>
 <div class="grid">
-  <div>
-    <label>Type of Rental</label>
-    <select id="rentalType">
-      <option>Separate rental portions / rooms within the property</option>
-    </select>
-  </div>
-
-  <div>
-    <label>Municipal Charges</label>
-    <select id="municipalTerms">
-      <option>Included in the monthly rent</option>
-    </select>
-  </div>
+<div><label>Rental type</label><input id="rentalType" value="Separate rooms / portions within the residential property"></div>
+<div><label>Maximum occupants</label><input id="maxOcc" value="Each tenant plus approved occupants only"></div>
+<div><label>Parking</label><input id="parking" placeholder="Example: Street parking / one bay each"></div>
+<div><label>Keys / remotes issued</label><input id="keys" placeholder="Example: Front gate key, room key"></div>
 </div>
 </fieldset>
 
 <fieldset>
 <legend>Lease Terms</legend>
-
 <div class="grid">
-  <div>
-    <label>Lease Start Date</label>
-    <input id="startDate" type="date" required />
-  </div>
-
-  <div>
-    <label>Lease End Date</label>
-    <input id="endDate" type="date" />
-  </div>
-
-  <div>
-    <label>Rent Due Day</label>
-    <input id="rentDueDay" value="1st day of each month" required />
-  </div>
-
-  <div>
-    <label>Notice Period</label>
-    <input id="noticePeriod" value="One calendar month written notice" />
-  </div>
-</div>
-
-<label>General Lease Notes</label>
-<textarea id="generalTerms">The tenants are renting separately. Each tenant is responsible for their own rent, deposit, conduct, guests, damage, and obligations. Municipal charges are included in the monthly rent unless there is excessive use, damage, unlawful use, tampering, illegal connections, or a separate written agreement.</textarea>
-</fieldset>
-
-<fieldset>
-<legend>Tenant 1 Details</legend>
-
-<div class="grid">
-  <div><label>Full Name</label><input id="t1Name" required /></div>
-  <div><label>ID / Passport Number</label><input id="t1Id" required /></div>
-  <div><label>Phone</label><input id="t1Phone" required /></div>
-  <div><label>Email</label><input id="t1Email" type="email" /></div>
-  <div><label>Room / Area Rented</label><input id="t1Area" required /></div>
-  <div><label>Monthly Rent</label><input id="t1Rent" placeholder="Example: R4,500" required /></div>
-  <div><label>Deposit</label><input id="t1Deposit" placeholder="Example: R4,500" /></div>
-  <div><label>Emergency Contact</label><input id="t1Emergency" /></div>
+<div><label>Lease start date</label><input id="start" type="date" required></div>
+<div><label>Lease end date</label><input id="end" type="date"></div>
+<div><label>Initial period</label><input id="period" placeholder="Example: 6 months"></div>
+<div><label>Rent due date</label><input id="due" value="1st day of each month"></div>
+<div><label>Notice period</label><input id="notice" value="One calendar month written notice"></div>
+<div><label>Cancellation penalty</label><input id="penalty" value="One month's rental"></div>
+<div><label>Annual escalation</label><input id="escalation" value="7% after the first year unless otherwise agreed"></div>
+<div><label>Late payment interest</label><input id="interest" value="2% above prime, subject to applicable law"></div>
 </div>
 </fieldset>
 
 <fieldset>
-<legend>Tenant 2 Details</legend>
-
+<legend>Tenant 1</legend>
 <div class="grid">
-  <div><label>Full Name</label><input id="t2Name" required /></div>
-  <div><label>ID / Passport Number</label><input id="t2Id" required /></div>
-  <div><label>Phone</label><input id="t2Phone" required /></div>
-  <div><label>Email</label><input id="t2Email" type="email" /></div>
-  <div><label>Room / Area Rented</label><input id="t2Area" required /></div>
-  <div><label>Monthly Rent</label><input id="t2Rent" placeholder="Example: R4,500" required /></div>
-  <div><label>Deposit</label><input id="t2Deposit" placeholder="Example: R4,500" /></div>
-  <div><label>Emergency Contact</label><input id="t2Emergency" /></div>
+<div><label>Full name</label><input id="t1Name" required></div>
+<div><label>ID / Passport</label><input id="t1Id" required></div>
+<div><label>Phone</label><input id="t1Phone" required></div>
+<div><label>Email</label><input id="t1Email"></div>
+<div><label>Room / area rented</label><input id="t1Area" required></div>
+<div><label>Monthly rent</label><input id="t1Rent" required placeholder="R"></div>
+<div><label>Deposit</label><input id="t1Deposit" placeholder="R"></div>
+<div><label>Emergency contact</label><input id="t1Emergency"></div>
 </div>
 </fieldset>
 
 <fieldset>
-<legend>House Rules</legend>
-
+<legend>Tenant 2</legend>
 <div class="grid">
-  <div>
-    <label>Pets</label>
-    <select id="pets">
-      <option>No pets allowed without written permission</option>
-      <option>Pets allowed with written permission</option>
-      <option>Pets allowed</option>
-    </select>
-  </div>
-
-  <div>
-    <label>Smoking</label>
-    <select id="smoking">
-      <option>No smoking inside the property</option>
-      <option>Smoking allowed outside only</option>
-      <option>No smoking anywhere on the property</option>
-    </select>
-  </div>
+<div><label>Full name</label><input id="t2Name" required></div>
+<div><label>ID / Passport</label><input id="t2Id" required></div>
+<div><label>Phone</label><input id="t2Phone" required></div>
+<div><label>Email</label><input id="t2Email"></div>
+<div><label>Room / area rented</label><input id="t2Area" required></div>
+<div><label>Monthly rent</label><input id="t2Rent" required placeholder="R"></div>
+<div><label>Deposit</label><input id="t2Deposit" placeholder="R"></div>
+<div><label>Emergency contact</label><input id="t2Emergency"></div>
 </div>
+</fieldset>
 
-<label>Additional Rules</label>
-<textarea id="houseRules">No illegal activity. No nuisance, excessive noise, overcrowding, subletting, or alterations without written permission. Tenants must keep their rented area and shared areas clean and must immediately report damage, leaks, electrical faults, or security issues.</textarea>
+<fieldset>
+<legend>Utilities, Rules and Add-ons</legend>
+<div class="grid">
+<div>
+<label>Municipal charges</label>
+<select id="utilities">
+<option>Included in the monthly rental</option>
+<option>Excluded and payable separately</option>
+<option>Partly included as agreed in writing</option>
+</select>
+</div>
+<div>
+<label>Pets</label>
+<select id="pets">
+<option>No pets without written permission</option>
+<option>Pets allowed with written permission</option>
+<option>No pets allowed</option>
+</select>
+</div>
+<div>
+<label>Smoking</label>
+<select id="smoking">
+<option>No smoking inside the premises</option>
+<option>Smoking outside only</option>
+<option>No smoking anywhere on the premises</option>
+</select>
+</div>
+<div>
+<label>Wi-Fi / Internet</label>
+<input id="wifi" value="Not included unless agreed in writing">
+</div>
+</div>
+<label>House rules</label>
+<textarea id="rules">No illegal activity, nuisance, excessive noise, overcrowding, subletting, tampering with municipal services, damage, alterations, or extra occupants without written permission. Shared areas must be kept clean.</textarea>
 </fieldset>
 
 <fieldset>
 <legend>Digital Signatures</legend>
+<label>Owner signature</label><canvas id="ownerSig" class="sig"></canvas>
+<button type="button" class="alt" onclick="clearSig('ownerSig')">Clear owner signature</button>
 
-<label>Landlord Signature</label>
-<canvas id="landlordSig" class="signature-pad"></canvas>
-<button type="button" class="secondary" onclick="clearSignature('landlordSig')">Clear Landlord Signature</button>
+<label>Tenant 1 signature</label><canvas id="t1Sig" class="sig"></canvas>
+<button type="button" class="alt" onclick="clearSig('t1Sig')">Clear tenant 1 signature</button>
 
-<label>Tenant 1 Signature</label>
-<canvas id="t1Sig" class="signature-pad"></canvas>
-<button type="button" class="secondary" onclick="clearSignature('t1Sig')">Clear Tenant 1 Signature</button>
-
-<label>Tenant 2 Signature</label>
-<canvas id="t2Sig" class="signature-pad"></canvas>
-<button type="button" class="secondary" onclick="clearSignature('t2Sig')">Clear Tenant 2 Signature</button>
+<label>Tenant 2 signature</label><canvas id="t2Sig" class="sig"></canvas>
+<button type="button" class="alt" onclick="clearSig('t2Sig')">Clear tenant 2 signature</button>
 </fieldset>
 
 </form>
 
 <div class="actions">
-  <button onclick="generateLease()">Generate Lease Preview</button>
-  <button onclick="downloadPDF()">Download PDF</button>
-  <button onclick="window.print()">Print</button>
-  <button onclick="emailLease()">Email Summary</button>
+<button onclick="generate()">Generate Lease</button>
+<button onclick="pdf()">Download PDF</button>
+<button onclick="window.print()">Print</button>
+<button onclick="emailLease()">Email Summary</button>
 </div>
 
-<div id="leasePreview"></div>
+<div id="preview" class="lease"></div>
 
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-const val = id => $(id).value || "";
+const $=id=>document.getElementById(id);
+const v=id=>$(id).value||"";
 
-function setupSignaturePad(id) {
-  const canvas = $(id);
-  const ctx = canvas.getContext("2d");
-  let drawing = false;
+function sigPad(id){
+ const c=$(id),x=c.getContext("2d"); let draw=false;
+ function resize(){const img=x.getImageData(0,0,c.width||1,c.height||1);c.width=c.offsetWidth;c.height=120;try{x.putImageData(img,0,0)}catch(e){}}
+ resize(); window.addEventListener("resize",resize);
+ function pos(e){const r=c.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return{x:p.clientX-r.left,y:p.clientY-r.top}}
+ function start(e){draw=true;let p=pos(e);x.beginPath();x.moveTo(p.x,p.y);e.preventDefault()}
+ function move(e){if(!draw)return;let p=pos(e);x.lineWidth=2;x.lineCap="round";x.lineTo(p.x,p.y);x.stroke();e.preventDefault()}
+ function stop(){draw=false}
+ c.addEventListener("mousedown",start);c.addEventListener("mousemove",move);c.addEventListener("mouseup",stop);c.addEventListener("mouseleave",stop);
+ c.addEventListener("touchstart",start);c.addEventListener("touchmove",move);c.addEventListener("touchend",stop);
+}
+function clearSig(id){const c=$(id);c.getContext("2d").clearRect(0,0,c.width,c.height)}
+["ownerSig","t1Sig","t2Sig"].forEach(sigPad);
 
-  function resize() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = 130;
-  }
-
-  resize();
-  window.addEventListener("resize", resize);
-
-  function position(e) {
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return {
-      x: clientX - rect.left,
-      y: clientY - rect.top
-    };
-  }
-
-  function start(e) {
-    drawing = true;
-    const p = position(e);
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-    e.preventDefault();
-  }
-
-  function draw(e) {
-    if (!drawing) return;
-    const p = position(e);
-    ctx.lineWidth = 2;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = "#000";
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-    e.preventDefault();
-  }
-
-  function stop() {
-    drawing = false;
-  }
-
-  canvas.addEventListener("mousedown", start);
-  canvas.addEventListener("mousemove", draw);
-  canvas.addEventListener("mouseup", stop);
-  canvas.addEventListener("mouseleave", stop);
-
-  canvas.addEventListener("touchstart", start);
-  canvas.addEventListener("touchmove", draw);
-  canvas.addEventListener("touchend", stop);
+function tenantRows(n){
+return `
+<tr><th colspan="2">Tenant ${n}</th></tr>
+<tr><td>Name</td><td>${v("t"+n+"Name")}</td></tr>
+<tr><td>ID / Passport</td><td>${v("t"+n+"Id")}</td></tr>
+<tr><td>Phone</td><td>${v("t"+n+"Phone")}</td></tr>
+<tr><td>Email</td><td>${v("t"+n+"Email")}</td></tr>
+<tr><td>Area rented</td><td>${v("t"+n+"Area")}</td></tr>
+<tr><td>Monthly rental</td><td>${v("t"+n+"Rent")}</td></tr>
+<tr><td>Deposit</td><td>${v("t"+n+"Deposit")}</td></tr>
+<tr><td>Emergency contact</td><td>${v("t"+n+"Emergency")}</td></tr>`;
 }
 
-function clearSignature(id) {
-  const canvas = $(id);
-  canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+function clauses(){
+return `
+<h2>2. Definitions and Interpretation</h2>
+<p>In this Agreement, “Owner” means the lessor named in the schedule; “Tenant” means each tenant named in the schedule; “Premises” means the property and the specific rented area allocated to each tenant; “Rental” means the monthly amount payable by each tenant; and “Deposit” means the amount paid as security for that tenant’s obligations.</p>
+<p>Words importing one gender include all genders. Singular includes plural. Headings are for convenience only. This Agreement must be interpreted consistently with applicable South African rental law, including the Rental Housing Act and applicable consumer protection law.</p>
+
+<h2>3. Lease</h2>
+<p>The Owner lets the Premises to the tenants, and each tenant hires only the specific room, area, or portion allocated to that tenant. The tenants rent separately and do not become co-tenants merely because they sign the same document.</p>
+
+<h2>4. Term</h2>
+<p>The lease starts on <b>${v("start")}</b> and ends on <b>${v("end")||"a month-to-month basis until terminated"}</b>. Initial period: <b>${v("period")||"as stated in this agreement"}</b>.</p>
+
+<h2>5. Continuation and Notice</h2>
+<p>Unless terminated or renewed in writing, the lease may continue month-to-month. Either party may terminate on <b>${v("notice")}</b>, subject to applicable law and any fixed-term rights.</p>
+
+<h2>6. Rent</h2>
+<p>Each tenant must pay their own rental by <b>${v("due")}</b>. Tenant 1 pays <b>${v("t1Rent")}</b>. Tenant 2 pays <b>${v("t2Rent")}</b>. Payment by one tenant does not discharge the other tenant’s separate rental obligation.</p>
+
+<h2>7. Deposit</h2>
+<p>Each tenant’s deposit is security for that tenant’s unpaid rent, damage, missing keys, cleaning, utilities if applicable, and other amounts owed. The deposit must be handled in accordance with applicable law and refunded after proper inspection and deduction of lawful amounts.</p>
+
+<h2>8. Municipal Charges and Services</h2>
+<p>Municipal charges are <b>${v("utilities")}</b>. This covers ordinary residential municipal usage only. Excessive use, unlawful use, tampering, fines, penalties, damage, special services, or separate service-provider accounts may be charged to the responsible tenant.</p>
+
+<h2>9. Electricity, Water, Refuse, Sewerage and Wi-Fi</h2>
+<p>Ordinary municipal charges are dealt with as stated above. Wi-Fi / Internet: <b>${v("wifi")}</b>. No tenant may interfere with meters, prepaid systems, municipal infrastructure, electrical fittings, water lines, drains, or service connections.</p>
+
+<h2>10. Use of Premises</h2>
+<p>The Premises may be used only as a private residence. No business, illegal activity, overcrowding, subletting, lodging house arrangement, storage of hazardous goods, or nuisance may take place without written permission.</p>
+
+<h2>11. Separate Tenancies</h2>
+<p>Each tenant is responsible for their own room or allocated area, own rental, own deposit, own guests, own damage, and own breach. A tenant is not liable for the other tenant’s rent unless the parties later agree otherwise in writing.</p>
+
+<h2>12. Shared Areas</h2>
+<p>Shared areas must be kept clean, safe, and usable by all lawful occupants. No tenant may monopolise, damage, dirty, or restrict access to shared areas.</p>
+
+<h2>13. House Rules</h2>
+<p>Pets: <b>${v("pets")}</b>. Smoking: <b>${v("smoking")}</b>.</p>
+<p>${v("rules")}</p>
+
+<h2>14. Inspection</h2>
+<p>The Owner and tenant should complete an entry inspection before occupation. Any defects must be recorded. A tenant must report newly discovered defects within 7 days. An exit inspection should be completed within the period required by law before or after the tenant vacates.</p>
+
+<h2>15. Maintenance and Repairs</h2>
+<p>The Owner is responsible for structural repairs not caused by the tenant. Each tenant must keep their area clean, prevent damage, report faults promptly, replace minor consumables where reasonable, and pay for damage caused by that tenant or their visitors.</p>
+
+<h2>16. Access by Owner</h2>
+<p>The Owner may access the Premises on reasonable notice for inspection, repairs, valuation, safety, maintenance, or showing the premises to prospective tenants or buyers. Emergency access may be immediate where necessary.</p>
+
+<h2>17. Tenant Obligations</h2>
+<ul>
+<li>Pay rent on time and without deduction.</li>
+<li>Keep the rented area and shared areas clean.</li>
+<li>Respect neighbours and other occupants.</li>
+<li>Report leaks, electrical faults, security issues, pests, and damage promptly.</li>
+<li>Return keys, remotes, and access devices on termination.</li>
+<li>Leave the premises in good condition, fair wear and tear excepted.</li>
+</ul>
+
+<h2>18. Tenant Prohibitions</h2>
+<ul>
+<li>No subletting or extra occupants without written permission.</li>
+<li>No structural changes, painting, drilling, or alterations without permission.</li>
+<li>No illegal activity, drugs, weapons, violence, harassment, or nuisance.</li>
+<li>No interference with locks, utilities, meters, plumbing, wiring, or security systems.</li>
+<li>No accumulation of refuse or conduct that creates health or safety risks.</li>
+</ul>
+
+<h2>19. Visitors</h2>
+<p>Each tenant is responsible for the conduct, damage, noise, parking, and rule breaches of their visitors. The Owner may restrict visitors who repeatedly breach the lease or house rules.</p>
+
+<h2>20. Parking and Vehicles</h2>
+<p>Parking: <b>${v("parking")||"Only as allocated by the Owner"}</b>. Vehicles must not obstruct access, leak oil, create nuisance, or be stored in a non-roadworthy condition without permission.</p>
+
+<h2>21. Keys and Security</h2>
+<p>Keys/remotes issued: <b>${v("keys")||"As recorded on handover"}</b>. No tenant may duplicate keys, change locks, or give access devices to others without written permission.</p>
+
+<h2>22. Damage, Cleaning and Deductions</h2>
+<p>The Owner may deduct from the responsible tenant’s deposit for unpaid rent, missing keys, cleaning, damage beyond fair wear and tear, unpaid charges, and reasonable costs arising from breach.</p>
+
+<h2>23. Liability</h2>
+<p>The Owner is not responsible for loss of tenant property unless caused by the Owner’s intentional or grossly negligent conduct. Tenants should insure their own belongings.</p>
+
+<h2>24. Early Cancellation</h2>
+<p>If a tenant cancels before the end of a fixed term without lawful cause, the Owner may charge a reasonable cancellation penalty. Agreed reference penalty: <b>${v("penalty")}</b>, subject to applicable law.</p>
+
+<h2>25. Breach</h2>
+<p>Failure to pay rent, illegal activity, damage, nuisance, overcrowding, unauthorised subletting, or repeated rule breaches may constitute breach. The Owner may give written notice requiring the breach to be remedied and may cancel the lease if the breach is not remedied within the legally required period.</p>
+
+<h2>26. Owner Cancellation</h2>
+<p>The Owner may cancel in accordance with applicable law, including for material breach, sale, occupation by Owner where lawfully permitted, or other lawful grounds.</p>
+
+<h2>27. Personal Information</h2>
+<p>Each tenant consents to the Owner collecting and using personal information for lease administration, verification, communication, payment records, emergency contact, enforcement, and lawful compliance.</p>
+
+<h2>28. Notices</h2>
+<p>Notices may be delivered by hand, email, WhatsApp, or other written electronic method provided the recipient can reasonably receive it. Parties must keep contact details updated.</p>
+
+<h2>29. Whole Agreement</h2>
+<p>This document, the schedule, house rules, inspection report, and signed annexures form the whole agreement. Changes must be in writing and signed or accepted electronically by the affected parties.</p>
+
+<h2>30. Electronic Signature</h2>
+<p>The parties agree that electronic signatures, typed acceptance, scanned signatures, or signature-pad signatures are valid for this Agreement to the extent permitted by applicable law.</p>
+
+<h2>31. Annexures</h2>
+<p>Annexure A: Banking details. Annexure B: Entry inspection. Annexure C: House rules. Annexure D: Proof of identity and emergency contacts.</p>`;
 }
 
-function validateForm() {
-  const form = $("leaseForm");
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return false;
-  }
-  return true;
+function generate(){
+ if(!$("form").checkValidity()){ $("form").reportValidity(); return; }
+
+$("preview").innerHTML=`
+<h1>Residential Lease Agreement</h1>
+<p style="text-align:center"><b>Separate Rental Agreement for Two Independent Tenants</b></p>
+
+<h2>1. Schedule</h2>
+<table class="schedule">
+<tr><th colspan="2">Owner / Lessor</th></tr>
+<tr><td>Owner name</td><td>${v("ownerName")}</td></tr>
+<tr><td>ID / Passport</td><td>${v("ownerId")}</td></tr>
+<tr><td>Phone / Email</td><td>${v("ownerPhone")} / ${v("ownerEmail")}</td></tr>
+<tr><td>Premises</td><td>${v("address")}</td></tr>
+<tr><td>Rental type</td><td>${v("rentalType")}</td></tr>
+<tr><td>Bank details</td><td>${v("bankName")} — ${v("bankAcc")}</td></tr>
+${tenantRows(1)}
+${tenantRows(2)}
+<tr><th colspan="2">Lease Terms</th></tr>
+<tr><td>Start / End</td><td>${v("start")} to ${v("end")||"month-to-month"}</td></tr>
+<tr><td>Rent due</td><td>${v("due")}</td></tr>
+<tr><td>Notice</td><td>${v("notice")}</td></tr>
+<tr><td>Municipal charges</td><td>${v("utilities")}</td></tr>
+<tr><td>Escalation</td><td>${v("escalation")}</td></tr>
+<tr><td>Interest</td><td>${v("interest")}</td></tr>
+</table>
+
+${clauses()}
+
+<h2>32. Signatures</h2>
+<table class="schedule">
+<tr><th>Party</th><th>Name</th><th>Signature</th><th>Date</th></tr>
+<tr><td>Owner</td><td>${v("ownerName")}</td><td><img class="sigImg" src="${$("ownerSig").toDataURL()}"></td><td>${new Date().toLocaleDateString()}</td></tr>
+<tr><td>Tenant 1</td><td>${v("t1Name")}</td><td><img class="sigImg" src="${$("t1Sig").toDataURL()}"></td><td>${new Date().toLocaleDateString()}</td></tr>
+<tr><td>Tenant 2</td><td>${v("t2Name")}</td><td><img class="sigImg" src="${$("t2Sig").toDataURL()}"></td><td>${new Date().toLocaleDateString()}</td></tr>
+</table>
+
+<p class="small">Generated electronically. Each tenant should receive a copy of the completed PDF.</p>
+`;
+$("preview").style.display="block";
+$("preview").scrollIntoView({behavior:"smooth"});
 }
 
-function generateLease() {
-  if (!validateForm()) return;
-
-  const landlordSig = $("landlordSig").toDataURL();
-  const t1Sig = $("t1Sig").toDataURL();
-  const t2Sig = $("t2Sig").toDataURL();
-
-  $("leasePreview").innerHTML = `
-    <div class="lease-title">
-      <h1>Residential Lease Agreement</h1>
-      <p>Separate Rental Agreement for Two Tenants</p>
-    </div>
-
-    <div class="clause">
-      This Residential Lease Agreement is entered into by <strong>${val("landlordName")}</strong>,
-      ID/Passport No. <strong>${val("landlordId") || "________________"}</strong>, as Landlord,
-      for the rental property situated at <strong>${val("propertyAddress")}</strong>.
-    </div>
-
-    <h2>1. Nature of Rental</h2>
-    <div class="clause">
-      The tenants are renting separately and not as joint tenants. Each tenant is responsible for
-      their own monthly rent, deposit, rented area, conduct, guests, and obligations under this agreement.
-    </div>
-
-    <h2>2. Lease Period</h2>
-    <div class="clause">
-      Start Date: <strong>${val("startDate")}</strong><br>
-      End Date: <strong>${val("endDate") || "Month-to-month / until terminated by written notice"}</strong><br>
-      Notice Period: <strong>${val("noticePeriod")}</strong>
-    </div>
-
-    <h2>3. Tenant 1</h2>
-    <div class="clause">
-      Name: <strong>${val("t1Name")}</strong><br>
-      ID/Passport: <strong>${val("t1Id")}</strong><br>
-      Phone: <strong>${val("t1Phone")}</strong><br>
-      Email: <strong>${val("t1Email")}</strong><br>
-      Area Rented: <strong>${val("t1Area")}</strong><br>
-      Monthly Rent: <strong>${val("t1Rent")}</strong><br>
-      Deposit: <strong>${val("t1Deposit") || "None recorded"}</strong><br>
-      Emergency Contact: <strong>${val("t1Emergency")}</strong>
-    </div>
-
-    <h2>4. Tenant 2</h2>
-    <div class="clause">
-      Name: <strong>${val("t2Name")}</strong><br>
-      ID/Passport: <strong>${val("t2Id")}</strong><br>
-      Phone: <strong>${val("t2Phone")}</strong><br>
-      Email: <strong>${val("t2Email")}</strong><br>
-      Area Rented: <strong>${val("t2Area")}</strong><br>
-      Monthly Rent: <strong>${val("t2Rent")}</strong><br>
-      Deposit: <strong>${val("t2Deposit") || "None recorded"}</strong><br>
-      Emergency Contact: <strong>${val("t2Emergency")}</strong>
-    </div>
-
-    <h2>5. Rent and Payment</h2>
-    <div class="clause">
-      Rent is payable by each tenant separately on or before the <strong>${val("rentDueDay")}</strong>.
-      Non-payment by one tenant does not excuse the other tenant from paying their own rent.
-    </div>
-
-    <h2>6. Municipal Charges</h2>
-    <div class="clause">
-      Municipal charges are <strong>${val("municipalTerms")}</strong>. This includes ordinary municipal
-      charges connected to the residential use of the property. Excessive use, unlawful use, damage,
-      tampering, illegal connections, fines, penalties, or special services may be recovered separately
-      from the responsible tenant.
-    </div>
-
-    <h2>7. Use of Property</h2>
-    <div class="clause">
-      The property may only be used for lawful residential purposes. No tenant may sublet, assign,
-      overcrowd, alter, damage, or misuse the property without the Landlord’s written permission.
-    </div>
-
-    <h2>8. House Rules</h2>
-    <div class="clause">
-      Pets: <strong>${val("pets")}</strong><br>
-      Smoking: <strong>${val("smoking")}</strong><br><br>
-      ${val("houseRules")}
-    </div>
-
-    <h2>9. General Terms</h2>
-    <div class="clause">
-      ${val("generalTerms")}
-    </div>
-
-    <h2>10. Inspection and Condition</h2>
-    <div class="clause">
-      The parties should complete a move-in inspection and record the condition of the rented area,
-      shared spaces, keys, remotes, fittings, furniture, and appliances. Damage beyond fair wear and tear
-      may be deducted from the responsible tenant’s deposit.
-    </div>
-
-    <h2>11. Signatures</h2>
-
-    <p><strong>Landlord:</strong> ${val("landlordName")}</p>
-    <img class="signature-img" src="${landlordSig}">
-    <p>Date: ${new Date().toLocaleDateString()}</p>
-
-    <p><strong>Tenant 1:</strong> ${val("t1Name")}</p>
-    <img class="signature-img" src="${t1Sig}">
-    <p>Date: ${new Date().toLocaleDateString()}</p>
-
-    <p><strong>Tenant 2:</strong> ${val("t2Name")}</p>
-    <img class="signature-img" src="${t2Sig}">
-    <p>Date: ${new Date().toLocaleDateString()}</p>
-  `;
-
-  $("leasePreview").style.display = "block";
-  $("leasePreview").scrollIntoView({ behavior: "smooth" });
+function pdf(){
+ generate();
+ html2pdf().set({
+ margin:10,
+ filename:"Raydo-Matthee-Residential-Lease.pdf",
+ image:{type:"jpeg",quality:.98},
+ html2canvas:{scale:2},
+ jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}
+ }).from($("preview")).save();
 }
 
-function downloadPDF() {
-  generateLease();
-
-  const element = $("leasePreview");
-
-  html2pdf()
-    .set({
-      margin: 10,
-      filename: "Residential-Lease-Agreement-Raydo-Matthee.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-    })
-    .from(element)
-    .save();
+function emailLease(){
+ generate();
+ const subject=encodeURIComponent("Residential Lease Agreement");
+ const body=encodeURIComponent($("preview").innerText+"\n\nPlease attach the downloaded signed PDF.");
+ window.location.href=`mailto:${v("ownerEmail")}?subject=${subject}&body=${body}`;
 }
-
-function emailLease() {
-  generateLease();
-
-  const subject = encodeURIComponent("Residential Lease Agreement");
-  const body = encodeURIComponent(
-    $("leasePreview").innerText +
-    "\n\nPlease download and attach the signed PDF if required."
-  );
-
-  window.location.href = `mailto:${val("landlordEmail")}?subject=${subject}&body=${body}`;
-}
-
-["landlordSig", "t1Sig", "t2Sig"].forEach(setupSignaturePad);
 </script>
 
 </body>
