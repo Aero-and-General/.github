@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Raydo Matthee | Comprehensive Residential Lease Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruon1LoNlGDuS1uHdbnxhZWYRtR8t+L4dS/1F1wB0LkgEFY6FhG0xzLs5vCrtK1t1Vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+:root{
+  --ink:#0f172a;
+  --muted:#475569;
+  --line:#cbd5e1;
+  --soft:#f8fafc;
+  --paper:#ffffff;
+  --accent:#111827;
+  --accent2:#334155;
+  --warn:#fff7ed;
+  --danger:#7f1d1d;
+  --ok:#064e3b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#e5e7eb;color:var(--ink)}
+header{background:linear-gradient(135deg,#111827,#1f2937);color:#fff;padding:30px 18px;text-align:center;border-bottom:5px solid #475569}
+header h1{margin:0 0 8px;font-size:28px;letter-spacing:.5px;text-transform:uppercase}
+header p{margin:4px auto;max-width:900px;color:#e5e7eb;line-height:1.5}
+.wrap{max-width:1240px;margin:24px auto 60px;background:var(--paper);padding:28px;border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.12)}
+.notice{background:#f8fafc;border:1px solid var(--line);border-left:5px solid #111827;padding:14px 16px;margin:0 0 18px;border-radius:8px;color:#334155;line-height:1.45;font-size:14px}
+.notice strong{color:#111827}
+form{margin-top:14px}
+fieldset{border:1px solid var(--line);border-radius:12px;margin:18px 0;padding:18px;background:#fff}
+legend{font-weight:700;padding:0 8px;color:#0f172a}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 18px}
+.full{grid-column:1/-1}
+label{font-weight:700;font-size:13px;display:block;margin-top:8px;color:#111827}
+input,textarea,select{width:100%;padding:10px 11px;border:1px solid #94a3b8;border-radius:8px;margin-top:5px;font-size:14px;background:#fff;color:#111827}
+textarea{min-height:76px;resize:vertical;line-height:1.45}
+input[type="checkbox"]{width:auto;margin-right:8px;vertical-align:middle}
+.inlineCheck{font-weight:600;display:flex;align-items:flex-start;gap:8px;margin-top:12px;color:#334155;line-height:1.4}
+.inlineCheck input{margin-top:2px;flex:0 0 auto}
+.help{font-size:12px;color:#64748b;margin-top:4px;line-height:1.35}
+.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;margin:24px 0;padding-top:8px;border-top:1px solid #e2e8f0}
+button{background:#111827;color:#fff;border:0;border-radius:9px;padding:12px 16px;cursor:pointer;font-weight:700;letter-spacing:.2px}
+button:hover{filter:brightness(1.08)}
+button.alt{background:#475569}
+button.light{background:#e2e8f0;color:#111827}
+button.danger{background:#7f1d1d}
+.sig{border:1px solid #111;height:125px;width:100%;border-radius:8px;background:#fff;touch-action:none;display:block;margin-top:8px}
+.sigTools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 4px}
+#preview{display:none;background:white;padding:42px;border:1px solid #ddd;margin-top:26px;border-radius:10px}
+.lease{color:#111;font-family:Arial,Helvetica,sans-serif}
+.lease h1{text-align:center;text-transform:uppercase;font-size:22px;margin:0 0 5px;letter-spacing:.5px}
+.lease .subtitle{text-align:center;font-size:13px;margin:0 0 22px;color:#334155}
+.lease h2{border:1px solid #334155;padding:8px 9px;background:#f8fafc;font-size:15px;margin:20px 0 10px;text-transform:uppercase}
+.lease h3{font-size:14px;margin:14px 0 8px;text-transform:uppercase;color:#111827}
+.lease p,.lease li{font-size:12.4px;line-height:1.55;margin:7px 0}
+.lease ul{margin-top:5px}
+.lease .noteBox{border:1px solid #cbd5e1;background:#f8fafc;padding:10px;margin:10px 0;border-radius:6px;font-size:12.2px;line-height:1.5}
+.lease .warningBox{border:1px solid #fed7aa;background:#fff7ed;padding:10px;margin:10px 0;border-radius:6px;font-size:12.2px;line-height:1.5}
+.schedule,.inspect,.signatureTable{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0 12px}
+.schedule th,.schedule td,.inspect th,.inspect td,.signatureTable th,.signatureTable td{border:1px solid #334155;padding:7px;vertical-align:top}
+.schedule th,.inspect th,.signatureTable th{background:#e2e8f0;text-align:left}
+.twoCol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sigImg{width:250px;height:86px;border:1px solid #94a3b8;object-fit:contain;background:#fff}
+.initialBox{display:inline-block;border-bottom:1px solid #111;min-width:80px;height:18px;margin-left:6px}
+.pageBreak{page-break-before:always;break-before:page}
+.small{font-size:11px!important;color:#475569!important;line-height:1.45!important}
+.badge{display:inline-block;border:1px solid #cbd5e1;background:#f8fafc;padding:3px 7px;border-radius:999px;font-size:11px;margin:2px;color:#334155}
+.footerLine{border-top:1px solid #cbd5e1;margin-top:18px;padding-top:8px;color:#64748b;font-size:10.8px;text-align:center}
+@media(max-width:850px){.grid,.grid3,.twoCol{grid-template-columns:1fr}.wrap{margin:12px;padding:16px}header h1{font-size:22px}.actions{align-items:stretch}.actions button{width:100%}}
+@media print{
+  header,form,.actions,.notice.noPrint{display:none!important}
+  body{background:#fff}
+  .wrap{box-shadow:none;margin:0;padding:0;max-width:none;border-radius:0}
+  #preview{display:block!important;border:0;padding:0;margin:0;border-radius:0}
+  .lease h2{break-after:avoid;page-break-after:avoid}
+  .schedule,.inspect,.signatureTable{page-break-inside:avoid;break-inside:avoid}
+  a{color:#111;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Residential Lease Agreement Generator</h1>
+  <p>Comprehensive South African residential lease for two independent tenants renting separate rooms / portions of one residential property.</p>
+</header>
+
+<div class="wrap">
+  <div class="notice noPrint">
+    <strong>Purpose:</strong> This single-file HTML tool captures lease information, generates a long-form lease, includes tenant-specific schedules and annexures, and supports print/PDF/email-summary workflows. It is a strong operational template, but it should still be reviewed by a South African attorney before signature and use in a dispute.
+  </div>
+
+  <form id="leaseForm">
+    <fieldset>
+      <legend>1. Owner / Lessor Details</legend>
+      <div class="grid">
+        <div><label>Owner / Lessor full legal name</label><input id="ownerName" value="Raydo Vernon Matthee" required></div>
+        <div><label>Owner ID / Passport number</label><input id="ownerId" value="8908225071089"></div>
+        <div><label>Owner mobile number</label><input id="ownerPhone" placeholder="+27..."></div>
+        <div><label>Owner email address</label><input id="ownerEmail" type="email" placeholder="name@example.com"></div>
+        <div class="full"><label>Owner residential / business address</label><textarea id="ownerAddress" placeholder="Physical address of owner / lessor"></textarea></div>
+        <div class="full"><label>Owner domicilium citandi et executandi / address for service</label><textarea id="ownerDomicilium" placeholder="Physical address in South Africa where formal notices may be delivered"></textarea><div class="help">A physical South African service address should be captured. Email can be added as an additional notice channel.</div></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>2. Banking and Payment Details</legend>
+      <div class="grid3">
+        <div><label>Bank name</label><input id="bankName" placeholder="Bank"></div>
+        <div><label>Account holder</label><input id="bankHolder" value="Raydo Vernon Matthee"></div>
+        <div><label>Account number</label><input id="bankAcc" placeholder="Account number"></div>
+        <div><label>Branch code</label><input id="branchCode" placeholder="Branch / universal code"></div>
+        <div><label>Account type</label><input id="accountType" placeholder="Cheque / Current / Savings"></div>
+        <div><label>Payment reference format</label><input id="paymentRef" value="Tenant name + rental month"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>3. Premises and Occupation</legend>
+      <div class="grid">
+        <div class="full"><label>Property address / Premises</label><textarea id="address" required>26 Second Avenue, Lambton, Ekurhuleni</textarea></div>
+        <div><label>Property description / erf / unit, if known</label><input id="propertyDesc" placeholder="Example: Residential dwelling, erf/unit details if available"></div>
+        <div><label>Rental structure</label><input id="rentalType" value="Separate rooms / portions within the residential property"></div>
+        <div><label>Permitted use</label><input id="use" value="Private residential accommodation only"></div>
+        <div><label>Maximum occupation rule</label><input id="maxOcc" value="Each tenant plus approved occupants only"></div>
+        <div><label>Shared areas</label><input id="sharedAreas" value="Kitchen, bathroom, passage, yard and other common areas as allocated by the Owner"></div>
+        <div><label>Parking allocation</label><input id="parking" placeholder="Example: Street parking / one bay each / none"></div>
+        <div><label>Keys, remotes and access devices issued</label><input id="keys" placeholder="Example: Front gate key, room key, remote"></div>
+        <div class="full"><label>Movables / furniture / appliances included</label><textarea id="movables" placeholder="List beds, cupboards, appliances, remotes, keys, curtains, furniture, fixtures, etc."></textarea></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>4. Lease Period, Renewal and Cancellation</legend>
+      <div class="grid3">
+        <div><label>Agreement signature date</label><input id="agreementDate" type="date"></div>
+        <div><label>Lease start date</label><input id="start" type="date" required></div>
+        <div><label>Lease end date</label><input id="end" type="date"></div>
+        <div><label>Lease type</label><select id="leaseType"><option>Fixed-term lease</option><option>Month-to-month periodic lease</option><option>Initial fixed term continuing month-to-month unless renewed or terminated</option></select></div>
+        <div><label>Initial period</label><input id="period" placeholder="Example: 6 months"></div>
+        <div><label>Rent due date</label><input id="due" value="1st day of each month"></div>
+        <div><label>Notice period</label><input id="notice" value="One full calendar month written notice, subject to CPA fixed-term cancellation rights"></div>
+        <div><label>Early cancellation reference charge</label><input id="penalty" value="Reasonable cancellation penalty only, calculated in accordance with applicable law"></div>
+        <div><label>Renewal notice window</label><input id="renewalNotice" value="40 to 80 business days before expiry for fixed-term leases"></div>
+        <div><label>Annual escalation</label><input id="escalation" value="7% after the first year unless otherwise agreed in writing"></div>
+        <div><label>Late payment interest</label><input id="interest" value="Interest may be charged on arrears, limited to the maximum permitted by applicable law"></div>
+        <div><label>Receipt / proof of payment requirement</label><input id="proof" value="Tenant must send proof of payment by WhatsApp or email on payment date"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>5. Tenant 1 Details</legend>
+      <div class="grid3">
+        <div><label>Full legal name</label><input id="t1Name" required></div>
+        <div><label>ID / Passport number</label><input id="t1Id" required></div>
+        <div><label>Date of birth</label><input id="t1Dob" type="date"></div>
+        <div><label>Mobile number</label><input id="t1Phone" required></div>
+        <div><label>Email address</label><input id="t1Email" type="email"></div>
+        <div><label>Employment / income source</label><input id="t1Employer" placeholder="Employer / self-employed / student / other"></div>
+        <div class="full"><label>Tenant current address / forwarding address</label><textarea id="t1Address"></textarea></div>
+        <div class="full"><label>Tenant domicilium / address for service</label><textarea id="t1Domicilium" placeholder="Physical South African service address. Can be the premises during occupation."></textarea></div>
+        <div><label>Room / area rented</label><input id="t1Area" required></div>
+        <div><label>Monthly rent</label><input id="t1Rent" required placeholder="R"></div>
+        <div><label>Deposit</label><input id="t1Deposit" placeholder="R"></div>
+        <div><label>Approved occupants</label><input id="t1Occupants" value="None unless recorded in writing"></div>
+        <div><label>Vehicle registration</label><input id="t1Vehicle" placeholder="Optional"></div>
+        <div><label>Emergency / next-of-kin contact</label><input id="t1Emergency" placeholder="Name, relationship, phone"></div>
+      </div>
+      <label class="inlineCheck"><input id="t1Consent" type="checkbox"> Tenant 1 consents to identity verification, lease administration, lawful credit/rental checks where separately authorised, emergency contact use, and processing of personal information for lease purposes.</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>6. Tenant 2 Details</legend>
+      <div class="grid3">
+        <div><label>Full legal name</label><input id="t2Name" required></div>
+        <div><label>ID / Passport number</label><input id="t2Id" required></div>
+        <div><label>Date of birth</label><input id="t2Dob" type="date"></div>
+        <div><label>Mobile number</label><input id="t2Phone" required></div>
+        <div><label>Email address</label><input id="t2Email" type="email"></div>
+        <div><label>Employment / income source</label><input id="t2Employer" placeholder="Employer / self-employed / student / other"></div>
+        <div class="full"><label>Tenant current address / forwarding address</label><textarea id="t2Address"></textarea></div>
+        <div class="full"><label>Tenant domicilium / address for service</label><textarea id="t2Domicilium" placeholder="Physical South African service address. Can be the premises during occupation."></textarea></div>
+        <div><label>Room / area rented</label><input id="t2Area" required></div>
+        <div><label>Monthly rent</label><input id="t2Rent" required placeholder="R"></div>
+        <div><label>Deposit</label><input id="t2Deposit" placeholder="R"></div>
+        <div><label>Approved occupants</label><input id="t2Occupants" value="None unless recorded in writing"></div>
+        <div><label>Vehicle registration</label><input id="t2Vehicle" placeholder="Optional"></div>
+        <div><label>Emergency / next-of-kin contact</label><input id="t2Emergency" placeholder="Name, relationship, phone"></div>
+      </div>
+      <label class="inlineCheck"><input id="t2Consent" type="checkbox"> Tenant 2 consents to identity verification, lease administration, lawful credit/rental checks where separately authorised, emergency contact use, and processing of personal information for lease purposes.</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>7. Utilities, Municipal Charges and Services</legend>
+      <div class="grid3">
+        <div><label>Municipal charges</label><select id="utilities"><option>Included in the monthly rental</option><option>Excluded and payable separately by the tenant</option><option>Partly included subject to fair-use limits</option><option>Shared pro-rata between lawful occupants</option></select></div>
+        <div><label>Electricity</label><select id="electricity"><option>Included in monthly rental subject to ordinary residential use</option><option>Prepaid electricity purchased by tenants</option><option>Excluded and billed separately</option><option>Shared pro-rata between lawful occupants</option></select></div>
+        <div><label>Water</label><select id="water"><option>Included in monthly rental subject to ordinary residential use</option><option>Excluded and billed separately</option><option>Shared pro-rata between lawful occupants</option></select></div>
+        <div><label>Refuse / sewerage</label><select id="refuse"><option>Included in monthly rental</option><option>Excluded and billed separately</option><option>Shared pro-rata between lawful occupants</option></select></div>
+        <div><label>Wi-Fi / Internet</label><input id="wifi" value="Not included unless agreed in writing"></div>
+        <div><label>Fair-use rule</label><input id="fairUse" value="Ordinary residential use only; excessive or abusive use may be recovered from the responsible tenant"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>8. House Rules</legend>
+      <div class="grid3">
+        <div><label>Pets</label><select id="pets"><option>No pets without prior written permission</option><option>Pets allowed with prior written permission and conditions</option><option>No pets allowed</option></select></div>
+        <div><label>Smoking</label><select id="smoking"><option>No smoking inside the premises</option><option>Smoking outside only</option><option>No smoking anywhere on the premises</option></select></div>
+        <div><label>Quiet hours</label><input id="quiet" value="22:00 to 06:00, unless otherwise agreed"></div>
+        <div class="full"><label>House rules and conduct standards</label><textarea id="rules">No illegal activity, nuisance, excessive noise, overcrowding, subletting, tampering with municipal services, damage, alterations, harassment, intimidation, violence, weapons, drugs, or extra occupants without written permission. Shared areas must be kept clean. Each tenant must respect the privacy, security and reasonable comfort of the Owner, neighbours and other lawful occupants.</textarea></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>9. Entry Condition and Inspection Notes</legend>
+      <div class="grid">
+        <div><label>Entry inspection date</label><input id="entryInspectionDate" type="date"></div>
+        <div><label>Inspection conducted by</label><input id="inspectionBy" placeholder="Owner and tenant(s)"></div>
+        <div class="full"><label>Known defects at commencement</label><textarea id="defects" placeholder="Record defects, marks, cracks, missing items, broken fittings, meter readings, photographs referenced, etc."></textarea></div>
+        <div class="full"><label>Meter readings / condition photos reference</label><textarea id="meterReadings" placeholder="Electricity, water, prepaid meter, photo folder/link, etc."></textarea></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>10. Digital Signatures</legend>
+      <p class="help">Use a mouse, trackpad, stylus, or touch screen. Signatures are embedded into the generated lease PDF. For stronger evidence, also retain emails/WhatsApp acceptance, IDs, proof of payment and a signed PDF copy.</p>
+      <label>Owner / Lessor signature</label>
+      <canvas id="ownerSig" class="sig"></canvas>
+      <div class="sigTools"><button type="button" class="alt" onclick="clearSig('ownerSig')">Clear owner signature</button></div>
+      <label>Tenant 1 signature</label>
+      <canvas id="t1Sig" class="sig"></canvas>
+      <div class="sigTools"><button type="button" class="alt" onclick="clearSig('t1Sig')">Clear tenant 1 signature</button></div>
+      <label>Tenant 2 signature</label>
+      <canvas id="t2Sig" class="sig"></canvas>
+      <div class="sigTools"><button type="button" class="alt" onclick="clearSig('t2Sig')">Clear tenant 2 signature</button></div>
+      <label class="inlineCheck"><input id="signatureConsent" type="checkbox" required> The parties confirm that they have read the generated lease, understand that their electronic signatures indicate acceptance, and agree to receive and retain the lease electronically.</label>
+    </fieldset>
+  </form>
+
+  <div class="actions noPrint">
+    <button type="button" onclick="generateLease()">Generate Full Lease</button>
+    <button type="button" onclick="downloadPdf()">Download PDF</button>
+    <button type="button" onclick="window.print()">Print</button>
+    <button type="button" onclick="emailLease()">Email Summary</button>
+    <button type="button" class="light" onclick="saveDraft()">Save Draft in Browser</button>
+    <button type="button" class="light" onclick="loadDraft()">Load Draft</button>
+    <button type="button" class="danger" onclick="clearDraft()">Clear Draft</button>
+  </div>
+
+  <div id="preview" class="lease"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const raw = id => ($(id)?.value || '').trim();
+const checked = id => $(id)?.checked ? 'Yes' : 'No';
+const esc = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+const v = id => esc(raw(id));
+const boolText = id => $(id)?.checked ? 'Yes' : 'No';
+function fmtDate(value){
+  if(!value) return '';
+  const parts = value.split('-');
+  if(parts.length !== 3) return esc(value);
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function todayDisplay(){ return new Date().toLocaleDateString('en-ZA', {year:'numeric', month:'long', day:'2-digit'}); }
+function signatureData(id){
+  const c = $(id);
+  if(!c) return '';
+  return c.toDataURL('image/png');
+}
+function sigPad(id){
+  const c = $(id), ctx = c.getContext('2d');
+  let drawing = false;
+  function resize(){
+    const data = c.width && c.height ? c.toDataURL() : null;
+    c.width = c.offsetWidth;
+    c.height = 125;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = 2; ctx.strokeStyle = '#111827';
+    if(data){ const img = new Image(); img.onload = () => ctx.drawImage(img,0,0,c.width,c.height); img.src = data; }
+  }
+  resize(); window.addEventListener('resize', resize);
+  function pos(e){ const r=c.getBoundingClientRect(); const p=e.touches ? e.touches[0] : e; return {x:p.clientX-r.left, y:p.clientY-r.top}; }
+  function start(e){ drawing=true; const p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault(); }
+  function move(e){ if(!drawing) return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); e.preventDefault(); }
+  function stop(){ drawing=false; }
+  ['mousedown','touchstart'].forEach(evt=>c.addEventListener(evt,start,{passive:false}));
+  ['mousemove','touchmove'].forEach(evt=>c.addEventListener(evt,move,{passive:false}));
+  ['mouseup','mouseleave','touchend','touchcancel'].forEach(evt=>c.addEventListener(evt,stop));
+}
+function clearSig(id){ const c=$(id); c.getContext('2d').clearRect(0,0,c.width,c.height); }
+['ownerSig','t1Sig','t2Sig'].forEach(sigPad);
+
+function tenantSchedule(n){
+  return `
+  <tr><th colspan="2">Tenant ${n} Separate Tenancy Schedule</th></tr>
+  <tr><td>Full legal name</td><td>${v(`t${n}Name`)}</td></tr>
+  <tr><td>ID / Passport / Date of birth</td><td>${v(`t${n}Id`)} / ${fmtDate(raw(`t${n}Dob`)) || 'Not stated'}</td></tr>
+  <tr><td>Phone / Email</td><td>${v(`t${n}Phone`)} / ${v(`t${n}Email`)}</td></tr>
+  <tr><td>Current / forwarding address</td><td>${v(`t${n}Address`) || 'Not stated'}</td></tr>
+  <tr><td>Domicilium / service address</td><td>${v(`t${n}Domicilium`) || 'Premises during occupation, unless otherwise notified in writing'}</td></tr>
+  <tr><td>Employer / income source</td><td>${v(`t${n}Employer`) || 'Not stated'}</td></tr>
+  <tr><td>Room / area rented</td><td>${v(`t${n}Area`)}</td></tr>
+  <tr><td>Monthly rental</td><td>${v(`t${n}Rent`)}</td></tr>
+  <tr><td>Deposit</td><td>${v(`t${n}Deposit`) || 'Not stated / not applicable'}</td></tr>
+  <tr><td>Approved occupants</td><td>${v(`t${n}Occupants`)}</td></tr>
+  <tr><td>Vehicle registration</td><td>${v(`t${n}Vehicle`) || 'None recorded'}</td></tr>
+  <tr><td>Emergency / next-of-kin contact</td><td>${v(`t${n}Emergency`) || 'Not stated'}</td></tr>
+  <tr><td>Personal information consent captured</td><td>${boolText(`t${n}Consent`)}</td></tr>`;
+}
+
+function legalClauses(){
+return `
+<h2>2. Definitions and Interpretation</h2>
+<p>In this Agreement, unless the context indicates otherwise: <b>Agreement</b> means this residential lease agreement, including all schedules, house rules, inspection records and annexures; <b>Owner</b> or <b>Lessor</b> means the person letting the Premises; <b>Tenant</b> means each individual tenant named in the schedule, acting in that tenant's own capacity; <b>Premises</b> means the residential property at the address recorded in the schedule, including the specific room, area or portion allocated to each tenant and any shared areas the Owner permits the tenant to use; <b>Rental</b> means the monthly rental payable by each tenant; <b>Deposit</b> means the security deposit paid by a tenant for that tenant's own obligations; and <b>Business Day</b> excludes Saturdays, Sundays and South African public holidays.</p>
+<p>Headings are for convenience and do not limit interpretation. The singular includes the plural and vice versa. A reference to written notice includes hand delivery, email, WhatsApp or another recorded electronic method if the recipient can reasonably access it, unless a stricter legal method is required.</p>
+
+<h2>3. Legal Nature of the Arrangement</h2>
+<p>The Owner lets the Premises to two independent tenants renting separate areas. Each tenant's rights and obligations are separate, unless this Agreement expressly states otherwise. Signing one combined document does not make the tenants jointly and severally liable for each other's rent, deposit, visitors, damage or breach.</p>
+<p>Each tenant is liable for: that tenant's own rental; that tenant's own deposit obligations; damage caused by that tenant, that tenant's occupants or visitors; loss of keys or access devices issued to that tenant; and breach of this Agreement by that tenant or persons entering through that tenant.</p>
+
+<h2>4. Lease Grant, Occupation and Permitted Use</h2>
+<p>The Owner lets to each tenant the specific room, area or portion recorded in the schedule, together with reasonable shared use of the common areas identified by the Owner. The Premises may be used only for <b>${v('use')}</b>. No tenant may use the Premises for business operations, illegal activity, short-term rental, lodging-house activity, commercial storage, hazardous goods, overcrowding or nuisance without the Owner's prior written consent.</p>
+<p>The maximum occupation rule is: <b>${v('maxOcc')}</b>. The approved occupants for each tenant are recorded in that tenant's schedule. Extra occupants are not permitted unless approved in writing by the Owner.</p>
+
+<h2>5. Lease Period, Renewal and Continuation</h2>
+<p>This is a <b>${v('leaseType')}</b>. The Agreement starts on <b>${fmtDate(raw('start'))}</b> and ends on <b>${fmtDate(raw('end')) || 'a month-to-month basis until lawfully terminated'}</b>. Initial period: <b>${v('period') || 'as recorded in this Agreement'}</b>.</p>
+<p>If the fixed term expires and the parties continue with occupation and rental payment without signing a new fixed-term agreement, the lease may continue as a periodic month-to-month lease on the same terms, subject to lawful changes and notices.</p>
+<p>For fixed-term leases, the Owner should give the tenant notice of the approaching expiry within the statutory renewal-notice window, recorded here as: <b>${v('renewalNotice')}</b>. Renewals, extensions and amendments must be recorded in writing and accepted by the affected parties.</p>
+
+<h2>6. Rental, Payment and Proof of Payment</h2>
+<p>Tenant 1 must pay <b>${v('t1Rent')}</b> per month for <b>${v('t1Area')}</b>. Tenant 2 must pay <b>${v('t2Rent')}</b> per month for <b>${v('t2Area')}</b>. Rental is due on: <b>${v('due')}</b>. Rental must be paid without deduction, set-off or delay unless the Owner agrees otherwise in writing or applicable law provides otherwise.</p>
+<p>Banking details are recorded in Annexure A. Payment reference: <b>${v('paymentRef')}</b>. Proof of payment requirement: <b>${v('proof')}</b>. The Owner may issue receipts or written statements for rental and other amounts received.</p>
+<p>Rental escalation: <b>${v('escalation')}</b>. Late payment interest: <b>${v('interest')}</b>. The Owner may not levy unlawful penalties for late payment, but may claim arrears, lawful interest, proven damages and permitted costs.</p>
+
+<h2>7. Deposit</h2>
+<p>Tenant 1 deposit: <b>${v('t1Deposit') || 'Not stated / not applicable'}</b>. Tenant 2 deposit: <b>${v('t2Deposit') || 'Not stated / not applicable'}</b>. Each deposit secures that tenant's own unpaid rental, lawful charges, cleaning, missing keys/remotes, damage beyond fair wear and tear, and other amounts legally recoverable from that tenant.</p>
+<p>The Owner must handle deposits in accordance with applicable South African rental law. Where a deposit is received, it should be receipted, retained appropriately, and refunded with applicable interest after deduction of lawful amounts, subject to the inspection and refund timing rules in the Rental Housing Act and applicable regulations.</p>
+<p>The Owner must make receipts or invoices for deductions available to the affected tenant where deductions are made. One tenant's deposit may not be used for another tenant's obligations unless that tenant caused or contributed to the relevant loss or expressly agrees in writing.</p>
+
+<h2>8. Municipal Charges, Electricity, Water, Refuse and Internet</h2>
+<p>Municipal charges: <b>${v('utilities')}</b>. Electricity: <b>${v('electricity')}</b>. Water: <b>${v('water')}</b>. Refuse / sewerage: <b>${v('refuse')}</b>. Wi-Fi / Internet: <b>${v('wifi')}</b>.</p>
+<p>Fair-use rule: <b>${v('fairUse')}</b>. Inclusion of municipal charges, if selected, covers ordinary residential use only. Excessive use, abusive use, illegal connections, tampering, fines, penalties, blocked drains caused by misuse, special services, or separate service-provider charges may be recovered from the responsible tenant.</p>
+<p>No tenant may tamper with meters, prepaid systems, electrical fittings, plumbing, drains, municipal infrastructure, gate motors, alarm systems, locks, cameras, internet routers or service connections.</p>
+
+<h2>9. Shared Areas and Common Facilities</h2>
+<p>Shared areas are: <b>${v('sharedAreas')}</b>. Shared areas must be kept clean, hygienic, safe and accessible. No tenant may monopolise shared areas, store excessive items in shared areas, prevent lawful access, leave dishes/refuse/clothing in shared areas, or use shared areas in a manner that disturbs the Owner, other occupants or neighbours.</p>
+<p>Each tenant is responsible for promptly cleaning after themselves and their visitors. If the Owner reasonably incurs cleaning or repair costs due to a tenant's conduct, the Owner may recover those costs from the responsible tenant.</p>
+
+<h2>10. House Rules</h2>
+<p>Pets: <b>${v('pets')}</b>. Smoking: <b>${v('smoking')}</b>. Quiet hours: <b>${v('quiet')}</b>.</p>
+<p>${v('rules')}</p>
+<p>House rules form part of this Agreement. Reasonable additional house rules may be issued in writing where necessary for safety, hygiene, security, lawful compliance, quiet enjoyment or operational management of the Premises, provided they are not inconsistent with applicable law.</p>
+
+<h2>11. Tenant Obligations</h2>
+<ul>
+<li>Pay rental and lawful charges on time.</li>
+<li>Use the Premises only as a private residence and only for the allocated tenant and approved occupants.</li>
+<li>Keep the allocated area and shared areas clean, hygienic and safe.</li>
+<li>Respect neighbours, the Owner and other lawful occupants.</li>
+<li>Report leaks, electrical faults, blocked drains, security issues, pests, damage, fire risks and maintenance issues promptly.</li>
+<li>Take reasonable steps to prevent damage, water wastage, fire, theft, unauthorised access and nuisance.</li>
+<li>Comply with municipal rules, body corporate/homeowners' association rules if applicable, house rules and lawful instructions relating to safety and maintenance.</li>
+<li>Return all keys, remotes and access devices on termination or earlier demand where legally justified.</li>
+<li>Leave the Premises in good, clean condition, fair wear and tear excepted.</li>
+</ul>
+
+<h2>12. Tenant Prohibitions</h2>
+<ul>
+<li>No subletting, cession, Airbnb-style letting, lodging, room sharing or transfer of occupation without prior written consent.</li>
+<li>No extra occupants without written consent.</li>
+<li>No illegal activity, drugs, weapons, violence, harassment, intimidation, threats, theft, fraud, malicious damage, nuisance or conduct that endangers others.</li>
+<li>No structural alterations, painting, drilling, mounting, fixture installation, lock changes, camera installation or electrical/plumbing changes without written consent.</li>
+<li>No interference with utilities, meters, security systems, locks, gates, fences, routers or service infrastructure.</li>
+<li>No accumulation of refuse, flammable goods, hazardous goods, blocked exits or health/safety risks.</li>
+</ul>
+
+<h2>13. Owner Obligations</h2>
+<ul>
+<li>Make the allocated area available for occupation on the commencement date, subject to the tenant meeting upfront payment and signature requirements.</li>
+<li>Maintain structural elements and systems for which the Owner is legally responsible, except where damage was caused by the tenant or persons entering through the tenant.</li>
+<li>Take reasonable steps to allow beneficial occupation and avoid unlawful interference with the tenant's reasonable peace, comfort and privacy.</li>
+<li>Attend to material defects and safety issues within a reasonable period after being notified, subject to urgency, access, availability of contractors and cause of damage.</li>
+<li>Handle deposits, inspections and lawful deductions in accordance with applicable law.</li>
+</ul>
+
+<h2>14. Entry and Exit Inspections</h2>
+<p>An entry inspection should be completed jointly before occupation or as soon as reasonably possible. Known defects must be recorded in Annexure B. The tenant must report additional defects discovered within 7 days after occupation, failing which the Premises may be deemed to have been received in good order except for recorded defects.</p>
+<p>An outgoing inspection should be arranged at a mutually convenient time within the legally required period before expiry or vacating. The purpose is to determine damage caused during occupation, fair wear and tear excepted. If a tenant does not attend after reasonable invitation, the Owner may conduct the inspection as permitted by law.</p>
+
+<h2>15. Maintenance, Repairs and Damage</h2>
+<p>The Owner is responsible for structural repairs and ordinary landlord maintenance not caused by the tenant. The tenant is responsible for damage, blockage, breakage, replacement, cleaning or loss caused by the tenant, occupants, visitors, negligence, misuse or breach.</p>
+<p>Urgent issues such as major leaks, electrical hazards, fire, security breaches and sewage overflow must be reported immediately. Non-urgent maintenance must be reported in writing with reasonable detail and photos where possible.</p>
+
+<h2>16. Owner Access</h2>
+<p>The Owner may enter the Premises with the tenant's consent, in emergencies, for inspection, maintenance, repairs, service provision, safety checks, showing the premises where lawfully permitted, tribunal/court order compliance, or where the Owner reasonably believes the Premises have been abandoned. Except in emergencies or abandonment scenarios, access should be on reasonable prior notice and at reasonable times.</p>
+
+<h2>17. Visitors and Conduct</h2>
+<p>Each tenant is responsible for all conduct, noise, damage, parking, security breaches and rule breaches of that tenant's visitors. Visitors may not become occupants by repeated overnight stay or extended presence. The Owner may restrict or refuse visitors who create nuisance, security risk, damage or repeated breaches.</p>
+
+<h2>18. Parking and Vehicles</h2>
+<p>Parking allocation: <b>${v('parking') || 'Only as allocated by the Owner in writing'}</b>. Vehicles must not obstruct access, leak oil, create nuisance, be repaired on the property without permission, be stored in non-roadworthy condition, or use parking not allocated to that tenant.</p>
+
+<h2>19. Keys, Remotes and Security</h2>
+<p>Keys/remotes/access devices issued: <b>${v('keys') || 'As recorded on handover'}</b>. No tenant may duplicate keys, change locks, bypass security, lend access devices, disclose gate/alarm codes, or grant unauthorised access. Lost keys/remotes and lock/security replacement required due to tenant fault may be charged to the responsible tenant.</p>
+
+<h2>20. Movables, Furniture and Inventory</h2>
+<p>Movables and included items: <b>${v('movables') || 'None recorded, except fixtures and fittings forming part of the Premises'}</b>. Included items must be returned in good working order, fair wear and tear excepted. Loss, abuse, breakage or missing items may be recovered from the responsible tenant.</p>
+
+<h2>21. Alterations, Fixtures and Improvements</h2>
+<p>No tenant may paint, drill, install shelves, alter locks, attach fixtures, install appliances, alter wiring/plumbing or make improvements without prior written consent. Approved alterations must be performed safely, lawfully and at the tenant's cost unless otherwise agreed. Any damage caused by removal must be repaired or paid for by the tenant.</p>
+
+<h2>22. Health, Safety, Fire and Security</h2>
+<p>Tenants must not create fire risks, block exits, overload plugs, store hazardous goods, disable alarms, interfere with electrical distribution boards, leave appliances unsafe, or compromise property security. Any safety incident must be reported immediately.</p>
+
+<h2>23. Personal Property and Insurance</h2>
+<p>Tenants are responsible for insuring their own belongings. The Owner is not liable for loss, theft, damage, interruption of services, load shedding, municipal interruption or acts of third parties unless caused by the Owner's intentional or grossly negligent conduct.</p>
+
+<h2>24. Personal Information, POPIA and Verification</h2>
+<p>Each tenant authorises the Owner to collect, store and process personal information necessary for lease administration, identity verification, communication, rental records, emergency contact, debt recovery, dispute resolution, legal compliance and enforcement of this Agreement. The Owner must use reasonable safeguards and must not process personal information for unrelated purposes without a lawful basis.</p>
+<p>Credit bureau, rental history or affordability checks should only be performed where the tenant has given the required consent and where such checks are lawful and relevant to the lease relationship.</p>
+
+<h2>25. Notices and Domicilium</h2>
+<p>The parties choose the domicilium / service addresses recorded in the schedule as their formal addresses for notices and legal documents. A party may change its service address by written notice. A physical South African address should be maintained. Email and WhatsApp may be used as additional written notice channels where the recipient can reasonably access them, but formal legal process may require stricter service.</p>
+
+<h2>26. Breach</h2>
+<p>Material breach includes non-payment, persistent late payment, illegal activity, nuisance, violence, harassment, damage, overcrowding, unauthorised subletting, unauthorised occupants, refusal of lawful access, serious house-rule breaches, tampering with services, or failure to comply with material tenant obligations.</p>
+<p>For a fixed-term consumer lease, the Owner should give written notice requiring remedy of a material breach and should allow the legally required period before cancellation where applicable. For month-to-month arrangements, the Owner may enforce rights in accordance with common law, the Rental Housing Act, the CPA where applicable, and any applicable regulations.</p>
+
+<h2>27. Tenant Cancellation, Owner Cancellation and Early Termination</h2>
+<p>A tenant may terminate a fixed-term consumer lease by giving the required written notice in a recorded manner, subject to liability for amounts owing up to cancellation and any reasonable cancellation charge permitted by law. The reference cancellation term is: <b>${v('penalty')}</b>. The actual charge must be reasonable and lawfully supportable in the circumstances.</p>
+<p>The Owner may cancel for material breach after giving required notice and opportunity to remedy where applicable. The Owner may also terminate a periodic lease by giving lawful written notice, subject to applicable law and the tenant's rights.</p>
+<p>No clause in this Agreement authorises self-help eviction, unlawful lockout, disconnection of services, seizure of tenant property, intimidation or harassment. If a tenant remains in unlawful occupation after cancellation or expiry, the Owner must use lawful dispute-resolution or court processes.</p>
+
+<h2>28. Holding Over and Continued Occupation</h2>
+<p>If a tenant remains in occupation after termination, cancellation or expiry without the Owner's consent, the tenant remains liable for occupational rental, utilities, damages and lawful costs until vacant possession is restored, without creating a new lease unless the Owner expressly agrees or applicable law implies a periodic lease.</p>
+
+<h2>29. Abandonment</h2>
+<p>If the Owner reasonably believes a tenant has abandoned the Premises, the Owner may take reasonable steps to secure the Premises, inspect, record the condition, protect property and mitigate loss, subject to applicable law. Any tenant belongings left behind must be handled reasonably and lawfully.</p>
+
+<h2>30. Sale or Transfer of Property</h2>
+<p>If the property is sold or transferred, the Owner should notify the tenants of the new owner or managing party and payment details once known. The common-law principle that a lease may survive sale of the property may apply, subject to the lease terms and applicable law.</p>
+
+<h2>31. Disputes, Tribunal and Jurisdiction</h2>
+<p>The parties should first attempt to resolve disputes in writing. Either party may approach the Rental Housing Tribunal, a competent court, or another lawful forum. Nothing in this Agreement removes rights or remedies available under applicable South African law.</p>
+
+<h2>32. Whole Agreement and Severability</h2>
+<p>This Agreement, the schedule, inspection notes, house rules, signatures and annexures form the whole agreement between the parties. Amendments must be in writing and accepted by the affected parties. If any provision is unlawful or unenforceable, it must be severed or read down to the extent necessary while the rest of the Agreement remains effective.</p>
+
+<h2>33. Electronic Signature and Electronic Records</h2>
+<p>The parties agree that this Agreement may be generated, signed, stored and shared electronically. The parties intend their electronic signatures, signature-pad marks, typed confirmations, email acceptance, WhatsApp acceptance, scanned signatures or PDF signatures to evidence acceptance, subject to applicable law. Each party should retain a copy of the signed PDF and related communications.</p>
+
+<h2>34. Annexures</h2>
+<p>The following annexures form part of this Agreement where completed or applicable: Annexure A: Banking and payment details; Annexure B: Entry inspection and defects list; Annexure C: House rules; Annexure D: POPIA and verification consent; Annexure E: Handover checklist; Annexure F: Tenant-specific schedules.</p>
+`;
+}
+
+function annexures(){
+return `
+<div class="pageBreak"></div>
+<h2>Annexure A: Banking and Payment Details</h2>
+<table class="schedule">
+<tr><td>Bank</td><td>${v('bankName') || 'Not stated'}</td></tr>
+<tr><td>Account holder</td><td>${v('bankHolder') || 'Not stated'}</td></tr>
+<tr><td>Account number</td><td>${v('bankAcc') || 'Not stated'}</td></tr>
+<tr><td>Branch code</td><td>${v('branchCode') || 'Not stated'}</td></tr>
+<tr><td>Account type</td><td>${v('accountType') || 'Not stated'}</td></tr>
+<tr><td>Payment reference</td><td>${v('paymentRef')}</td></tr>
+<tr><td>Proof of payment</td><td>${v('proof')}</td></tr>
+</table>
+
+<h2>Annexure B: Entry Inspection, Condition and Defects</h2>
+<table class="schedule">
+<tr><td>Entry inspection date</td><td>${fmtDate(raw('entryInspectionDate')) || 'Not completed'}</td></tr>
+<tr><td>Inspection conducted by</td><td>${v('inspectionBy') || 'Owner and tenant(s), if present'}</td></tr>
+<tr><td>Known defects at commencement</td><td>${v('defects') || 'No defects recorded at generation date'}</td></tr>
+<tr><td>Meter readings / photo reference</td><td>${v('meterReadings') || 'Not recorded'}</td></tr>
+</table>
+<table class="inspect">
+<tr><th>Area / Item</th><th>Condition at Entry</th><th>Notes / Photos</th><th>Initials</th></tr>
+<tr><td>Tenant 1 room / area</td><td></td><td></td><td></td></tr>
+<tr><td>Tenant 2 room / area</td><td></td><td></td><td></td></tr>
+<tr><td>Kitchen / shared area</td><td></td><td></td><td></td></tr>
+<tr><td>Bathroom / toilet / shower</td><td></td><td></td><td></td></tr>
+<tr><td>Doors / locks / keys</td><td></td><td></td><td></td></tr>
+<tr><td>Windows / burglar bars</td><td></td><td></td><td></td></tr>
+<tr><td>Electrical fittings / plugs / lights</td><td></td><td></td><td></td></tr>
+<tr><td>Plumbing / drains / taps</td><td></td><td></td><td></td></tr>
+<tr><td>Furniture / appliances / movables</td><td></td><td></td><td></td></tr>
+<tr><td>Yard / parking / gate / perimeter</td><td></td><td></td><td></td></tr>
+</table>
+
+<h2>Annexure C: House Rules</h2>
+<p>${v('rules')}</p>
+<ul>
+<li>Shared areas must be cleaned immediately after use.</li>
+<li>Noise must be kept reasonable, especially during quiet hours: <b>${v('quiet')}</b>.</li>
+<li>Visitors remain the responsibility of the tenant they visit.</li>
+<li>No unauthorised persons may be given keys, remotes, codes or access devices.</li>
+<li>Waste must be placed in the correct bins and may not accumulate indoors or in shared areas.</li>
+<li>Food must be stored hygienically to avoid pests.</li>
+<li>No tenant may interfere with another occupant's room, belongings, privacy or lawful use of shared areas.</li>
+</ul>
+
+<h2>Annexure D: POPIA and Verification Consent</h2>
+<p>Each tenant consents to the Owner processing personal information necessary for this lease relationship, including identity details, contact information, emergency contact details, payment history, arrears records, inspection records, breach notices and related communications. Processing is limited to lease administration, legal compliance, safety, emergency contact, debt recovery, dispute handling and enforcement.</p>
+<p>Tenant 1 consent captured: <b>${boolText('t1Consent')}</b>. Tenant 2 consent captured: <b>${boolText('t2Consent')}</b>. Separate consent should be obtained before credit bureau or tenant-risk checks where required.</p>
+
+<h2>Annexure E: Handover Checklist</h2>
+<table class="inspect">
+<tr><th>Item</th><th>Tenant 1</th><th>Tenant 2</th><th>Owner Initial</th></tr>
+<tr><td>ID/passport copy received</td><td></td><td></td><td></td></tr>
+<tr><td>Proof of income / employment received, if required</td><td></td><td></td><td></td></tr>
+<tr><td>Deposit received</td><td></td><td></td><td></td></tr>
+<tr><td>First month rent received</td><td></td><td></td><td></td></tr>
+<tr><td>Keys/remotes issued and recorded</td><td></td><td></td><td></td></tr>
+<tr><td>Entry inspection completed</td><td></td><td></td><td></td></tr>
+<tr><td>House rules explained</td><td></td><td></td><td></td></tr>
+<tr><td>Emergency contact captured</td><td></td><td></td><td></td></tr>
+<tr><td>Signed PDF sent to tenant</td><td></td><td></td><td></td></tr>
+</table>
+`;
+}
+
+function generateLease(){
+  const form = $('leaseForm');
+  if(!form.checkValidity()){
+    form.reportValidity();
+    return false;
+  }
+  const generatedAt = new Date().toLocaleString('en-ZA', {year:'numeric', month:'long', day:'2-digit', hour:'2-digit', minute:'2-digit'});
+  $('preview').innerHTML = `
+  <h1>Residential Lease Agreement</h1>
+  <p class="subtitle"><b>Separate Rental Agreement for Two Independent Tenants</b><br>Generated electronically on ${generatedAt}</p>
+  <div class="warningBox"><b>Important:</b> This document is designed as a practical South African residential lease template for signature and PDF generation. It does not replace independent legal advice. The parties should ensure all completed fields are accurate before signing.</div>
+
+  <h2>1. Schedule of Parties, Premises and Commercial Terms</h2>
+  <table class="schedule">
+    <tr><th colspan="2">Owner / Lessor</th></tr>
+    <tr><td>Full legal name</td><td>${v('ownerName')}</td></tr>
+    <tr><td>ID / Passport</td><td>${v('ownerId') || 'Not stated'}</td></tr>
+    <tr><td>Phone / Email</td><td>${v('ownerPhone') || 'Not stated'} / ${v('ownerEmail') || 'Not stated'}</td></tr>
+    <tr><td>Residential / business address</td><td>${v('ownerAddress') || 'Not stated'}</td></tr>
+    <tr><td>Domicilium / address for service</td><td>${v('ownerDomicilium') || 'Not stated'}</td></tr>
+    <tr><th colspan="2">Premises</th></tr>
+    <tr><td>Property address</td><td>${v('address')}</td></tr>
+    <tr><td>Property description</td><td>${v('propertyDesc') || 'Residential dwelling / portion thereof'}</td></tr>
+    <tr><td>Rental structure</td><td>${v('rentalType')}</td></tr>
+    <tr><td>Permitted use</td><td>${v('use')}</td></tr>
+    <tr><td>Shared areas</td><td>${v('sharedAreas')}</td></tr>
+    ${tenantSchedule(1)}
+    ${tenantSchedule(2)}
+    <tr><th colspan="2">Lease Terms</th></tr>
+    <tr><td>Agreement date</td><td>${fmtDate(raw('agreementDate')) || todayDisplay()}</td></tr>
+    <tr><td>Lease type</td><td>${v('leaseType')}</td></tr>
+    <tr><td>Start / End</td><td>${fmtDate(raw('start'))} to ${fmtDate(raw('end')) || 'month-to-month / until lawfully terminated'}</td></tr>
+    <tr><td>Initial period</td><td>${v('period') || 'Not stated'}</td></tr>
+    <tr><td>Rental due date</td><td>${v('due')}</td></tr>
+    <tr><td>Notice period</td><td>${v('notice')}</td></tr>
+    <tr><td>Early cancellation reference</td><td>${v('penalty')}</td></tr>
+    <tr><td>Renewal notice window</td><td>${v('renewalNotice')}</td></tr>
+    <tr><td>Escalation</td><td>${v('escalation')}</td></tr>
+    <tr><td>Late payment interest</td><td>${v('interest')}</td></tr>
+    <tr><td>Municipal charges</td><td>${v('utilities')}</td></tr>
+    <tr><td>Electricity / Water / Refuse</td><td>${v('electricity')} / ${v('water')} / ${v('refuse')}</td></tr>
+    <tr><td>Wi-Fi / Internet</td><td>${v('wifi')}</td></tr>
+    <tr><td>Parking</td><td>${v('parking') || 'Not allocated unless agreed in writing'}</td></tr>
+    <tr><td>Keys / access devices</td><td>${v('keys') || 'To be recorded on handover'}</td></tr>
+  </table>
+
+  ${legalClauses()}
+
+  <h2>35. Signatures and Acceptance</h2>
+  <p>By signing below, the Owner and each tenant confirm that they have read this Agreement, checked the schedule, understand their obligations, and accept the Agreement and annexures. Each tenant signs only for that tenant's own separate tenancy unless expressly stated otherwise.</p>
+  <table class="signatureTable">
+    <tr><th>Party</th><th>Name</th><th>Signature</th><th>Date</th></tr>
+    <tr><td>Owner / Lessor</td><td>${v('ownerName')}</td><td><img class="sigImg" alt="Owner signature" src="${signatureData('ownerSig')}"></td><td>${todayDisplay()}</td></tr>
+    <tr><td>Tenant 1</td><td>${v('t1Name')}</td><td><img class="sigImg" alt="Tenant 1 signature" src="${signatureData('t1Sig')}"></td><td>${todayDisplay()}</td></tr>
+    <tr><td>Tenant 2</td><td>${v('t2Name')}</td><td><img class="sigImg" alt="Tenant 2 signature" src="${signatureData('t2Sig')}"></td><td>${todayDisplay()}</td></tr>
+  </table>
+
+  ${annexures()}
+
+  <div class="footerLine">Generated electronically for Raydo Matthee residential lease administration. Each party should retain the final signed PDF and all supporting records.</div>
+  `;
+  $('preview').style.display = 'block';
+  $('preview').scrollIntoView({behavior:'smooth', block:'start'});
+  return true;
+}
+
+function downloadPdf(){
+  if(!generateLease()) return;
+  const fileNameSafe = `${raw('t1Name') || 'Tenant1'}-${raw('t2Name') || 'Tenant2'}-Residential-Lease`.replace(/[^a-z0-9\-]+/gi,'-').replace(/-+/g,'-');
+  html2pdf().set({
+    margin: [9,9,9,9],
+    filename: `${fileNameSafe}.pdf`,
+    image: {type:'jpeg', quality:0.98},
+    html2canvas: {scale:2, useCORS:true, letterRendering:true},
+    jsPDF: {unit:'mm', format:'a4', orientation:'portrait'},
+    pagebreak: {mode:['css','legacy'], before:'.pageBreak'}
+  }).from($('preview')).save();
+}
+
+function emailLease(){
+  if(!generateLease()) return;
+  const tenantEmails = [raw('t1Email'), raw('t2Email')].filter(Boolean).join(',');
+  const to = raw('ownerEmail') || tenantEmails || '';
+  const subject = encodeURIComponent('Residential Lease Agreement - Review and Signed PDF');
+  const body = encodeURIComponent(
+`Dear parties,\n\nThe residential lease agreement has been generated. Please download the signed PDF from the lease generator, attach it to this email, and retain a copy for your records.\n\nSummary:\nOwner: ${raw('ownerName')}\nPremises: ${raw('address')}\nTenant 1: ${raw('t1Name')} - ${raw('t1Area')} - ${raw('t1Rent')}\nTenant 2: ${raw('t2Name')} - ${raw('t2Area')} - ${raw('t2Rent')}\nLease start: ${fmtDate(raw('start'))}\nLease end: ${fmtDate(raw('end')) || 'Month-to-month / until lawfully terminated'}\n\nRegards\n${raw('ownerName')}`);
+  window.location.href = `mailto:${encodeURIComponent(to)}?subject=${subject}&body=${body}`;
+}
+
+function saveDraft(){
+  const data = {};
+  document.querySelectorAll('input, textarea, select').forEach(el=>{
+    if(el.type === 'checkbox') data[el.id] = el.checked;
+    else data[el.id] = el.value;
+  });
+  localStorage.setItem('raydoFullLeaseDraft', JSON.stringify(data));
+  alert('Lease draft saved in this browser.');
+}
+function loadDraft(){
+  const data = JSON.parse(localStorage.getItem('raydoFullLeaseDraft') || '{}');
+  Object.entries(data).forEach(([id,value])=>{
+    const el = $(id);
+    if(!el) return;
+    if(el.type === 'checkbox') el.checked = !!value;
+    else el.value = value;
+  });
+  alert(Object.keys(data).length ? 'Lease draft loaded.' : 'No saved draft found in this browser.');
+}
+function clearDraft(){
+  if(confirm('Clear saved browser draft? This does not clear the visible form.')){
+    localStorage.removeItem('raydoFullLeaseDraft');
+    alert('Saved draft cleared.');
+  }
+}
+
+(function initDefaults(){
+  if(!$('agreementDate').value) $('agreementDate').value = todayISO();
+})();
+</script>
+</body>
+</html>
