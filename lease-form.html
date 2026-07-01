@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Residential Lease Agreement</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; color:#222; }
+    input, textarea, select { width:100%; padding:8px; margin:5px 0 12px; }
+    label { font-weight:bold; }
+    section { border:1px solid #ccc; padding:18px; margin-bottom:20px; border-radius:8px; }
+    button { padding:12px 18px; margin:8px; cursor:pointer; }
+    .tenant { background:#f7f7f7; }
+    .lease-output { display:none; border-top:3px solid #000; margin-top:30px; padding-top:20px; }
+    canvas { border:1px solid #333; width:100%; height:120px; }
+    @media print {
+      form, .buttons { display:none; }
+      .lease-output { display:block; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Residential Lease Agreement Form</h1>
+
+<form id="leaseForm">
+
+<section>
+  <h2>Landlord Details</h2>
+  <label>Landlord Full Name</label>
+  <input id="landlordName" value="Raydo Vernon Matthee">
+
+  <label>Landlord Email</label>
+  <input id="landlordEmail" type="email">
+
+  <label>Landlord Phone</label>
+  <input id="landlordPhone">
+
+  <label>Property Address</label>
+  <textarea id="propertyAddress">26 Second Avenue, Lambton, Ekurhuleni</textarea>
+</section>
+
+<section>
+  <h2>Lease Terms</h2>
+  <label>Lease Start Date</label>
+  <input id="startDate" type="date">
+
+  <label>Lease End Date</label>
+  <input id="endDate" type="date">
+
+  <label>Rent Due Day Each Month</label>
+  <input id="rentDueDay" placeholder="Example: 1st day of each month">
+
+  <label>Municipal Charges</label>
+  <select id="municipal">
+    <option>Monthly rent is inclusive of municipal charges</option>
+  </select>
+
+  <label>Pets Allowed?</label>
+  <select id="pets">
+    <option>No</option>
+    <option>Yes, with written permission</option>
+  </select>
+
+  <label>Smoking Allowed?</label>
+  <select id="smoking">
+    <option>No smoking inside the property</option>
+    <option>Smoking allowed only outside</option>
+  </select>
+</section>
+
+<section class="tenant">
+  <h2>Tenant 1</h2>
+  <label>Full Name</label><input id="t1Name">
+  <label>ID / Passport Number</label><input id="t1Id">
+  <label>Phone</label><input id="t1Phone">
+  <label>Email</label><input id="t1Email" type="email">
+  <label>Room / Area Rented</label><input id="t1Room">
+  <label>Monthly Rent</label><input id="t1Rent" placeholder="R">
+  <label>Deposit</label><input id="t1Deposit" placeholder="R">
+  <label>Emergency Contact</label><input id="t1Emergency">
+</section>
+
+<section class="tenant">
+  <h2>Tenant 2</h2>
+  <label>Full Name</label><input id="t2Name">
+  <label>ID / Passport Number</label><input id="t2Id">
+  <label>Phone</label><input id="t2Phone">
+  <label>Email</label><input id="t2Email" type="email">
+  <label>Room / Area Rented</label><input id="t2Room">
+  <label>Monthly Rent</label><input id="t2Rent" placeholder="R">
+  <label>Deposit</label><input id="t2Deposit" placeholder="R">
+  <label>Emergency Contact</label><input id="t2Emergency">
+</section>
+
+<section>
+  <h2>Additional Rules</h2>
+  <textarea id="rules" rows="5">Tenants rent separately and are each responsible for their own rent. Rent includes municipal charges, unless excessive usage, damage, unlawful use, or special services are agreed separately in writing.</textarea>
+</section>
+
+<section>
+  <h2>Digital Signatures</h2>
+  <label>Landlord Signature</label>
+  <canvas id="landlordSig"></canvas>
+  <button type="button" onclick="clearCanvas('landlordSig')">Clear</button>
+
+  <label>Tenant 1 Signature</label>
+  <canvas id="t1Sig"></canvas>
+  <button type="button" onclick="clearCanvas('t1Sig')">Clear</button>
+
+  <label>Tenant 2 Signature</label>
+  <canvas id="t2Sig"></canvas>
+  <button type="button" onclick="clearCanvas('t2Sig')">Clear</button>
+</section>
+
+</form>
+
+<div class="buttons">
+  <button onclick="generateLease()">Generate Lease</button>
+  <button onclick="window.print()">Print / Save as PDF</button>
+  <button onclick="downloadHTML()">Download Completed HTML</button>
+  <button onclick="emailSummary()">Email Summary</button>
+</div>
+
+<div id="leaseOutput" class="lease-output"></div>
+
+<script>
+function val(id){ return document.getElementById(id).value || ""; }
+
+function generateLease(){
+  const output = document.getElementById("leaseOutput");
+
+  output.innerHTML = `
+    <h1>Residential Lease Agreement</h1>
+
+    <p>This Residential Lease Agreement is entered into between
+    <strong>${val("landlordName")}</strong> as Landlord and the tenants listed below.</p>
+
+    <h2>Property</h2>
+    <p>${val("propertyAddress")}</p>
+
+    <h2>Lease Period</h2>
+    <p>Start Date: ${val("startDate")}<br>
+    End Date: ${val("endDate")}<br>
+    Rent Due: ${val("rentDueDay")}</p>
+
+    <h2>Tenant 1</h2>
+    <p>
+      Name: ${val("t1Name")}<br>
+      ID/Passport: ${val("t1Id")}<br>
+      Phone: ${val("t1Phone")}<br>
+      Email: ${val("t1Email")}<br>
+      Area Rented: ${val("t1Room")}<br>
+      Monthly Rent: ${val("t1Rent")}<br>
+      Deposit: ${val("t1Deposit")}<br>
+      Emergency Contact: ${val("t1Emergency")}
+    </p>
+
+    <h2>Tenant 2</h2>
+    <p>
+      Name: ${val("t2Name")}<br>
+      ID/Passport: ${val("t2Id")}<br>
+      Phone: ${val("t2Phone")}<br>
+      Email: ${val("t2Email")}<br>
+      Area Rented: ${val("t2Room")}<br>
+      Monthly Rent: ${val("t2Rent")}<br>
+      Deposit: ${val("t2Deposit")}<br>
+      Emergency Contact: ${val("t2Emergency")}
+    </p>
+
+    <h2>Municipal Charges</h2>
+    <p>${val("municipal")}.</p>
+
+    <h2>House Rules</h2>
+    <p>Pets: ${val("pets")}<br>
+    Smoking: ${val("smoking")}</p>
+    <p>${val("rules")}</p>
+
+    <h2>Signatures</h2>
+    <p>Landlord:</p>
+    <img src="${document.getElementById("landlordSig").toDataURL()}" style="width:300px;height:100px;border:1px solid #ccc;">
+
+    <p>Tenant 1:</p>
+    <img src="${document.getElementById("t1Sig").toDataURL()}" style="width:300px;height:100px;border:1px solid #ccc;">
+
+    <p>Tenant 2:</p>
+    <img src="${document.getElementById("t2Sig").toDataURL()}" style="width:300px;height:100px;border:1px solid #ccc;">
+
+    <p>Date Generated: ${new Date().toLocaleString()}</p>
+  `;
+
+  output.style.display = "block";
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+function downloadHTML(){
+  generateLease();
+  const content = "<html><body>" + document.getElementById("leaseOutput").innerHTML + "</body></html>";
+  const blob = new Blob([content], {type:"text/html"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "completed-residential-lease.html";
+  a.click();
+}
+
+function emailSummary(){
+  generateLease();
+  const subject = encodeURIComponent("Completed Residential Lease Agreement");
+  const body = encodeURIComponent(document.getElementById("leaseOutput").innerText);
+  window.location.href = `mailto:${val("landlordEmail")}?subject=${subject}&body=${body}`;
+}
+
+function setupSignature(canvasId){
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext("2d");
+  canvas.width = canvas.offsetWidth;
+  canvas.height = 120;
+  let drawing = false;
+
+  canvas.addEventListener("mousedown", e => { drawing = true; draw(e); });
+  canvas.addEventListener("mouseup", () => { drawing = false; ctx.beginPath(); });
+  canvas.addEventListener("mousemove", draw);
+
+  canvas.addEventListener("touchstart", e => { drawing = true; draw(e.touches[0]); e.preventDefault(); });
+  canvas.addEventListener("touchend", () => { drawing = false; ctx.beginPath(); });
+  canvas.addEventListener("touchmove", e => { draw(e.touches[0]); e.preventDefault(); });
+
+  function draw(e){
+    if(!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#000";
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  }
+}
+
+function clearCanvas(id){
+  const c = document.getElementById(id);
+  c.getContext("2d").clearRect(0,0,c.width,c.height);
+}
+
+["landlordSig","t1Sig","t2Sig"].forEach(setupSignature);
+</script>
+
+</body>
+</html>
